@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Processes | Destiny Academy</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f0f4f8;
+            color: #001024;
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        header {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 8px #64b5f6;
+            text-align: center;
+            color: #001024;
+        }
+
+        .content {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-left: 6px solid #00ffcc;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 0 25px rgba(0, 150, 255, 0.25);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin: 1.5rem 0 1rem 0;
+            color: #001024;
+            text-shadow: 0 0 4px #64b5f6;
+        }
+
+        h3 {
+            font-size: 2rem;
+            color: #3c02b8;
+        }
+
+        #notes {
+            font-size: 1.3rem;
+            color: #000;
+            margin-bottom: 1rem;
+        }
+
+        #words {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #3c02b8;
+            background: #f0f0f0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            line-height: 1.8;
+        }
+
+        p {
+            font-size: 1.4rem;
+            color: #001024;
+        }
+
+        strong, em, b {
+            color: #3c02b8;
+        }
+
+        img, video {
+            max-width: 100%;
+            height: auto;
+            margin: 1.5rem auto 2rem auto;
+            display: block;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Next button */
+        #next {
+            background-color: #3c02b8;
+            color: #fff;
+            width: 220px;
+            height: 55px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 2rem auto;
+            display: block;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(60, 2, 184, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        #next:hover {
+            background-color: #5a1ee0;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(60, 2, 184, 0.5);
+        }
+
+        #next:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Beautiful Progress Bar */
+        .progress-container {
+            height: 14px;
+            background: #e0e0e0;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin: 1.2rem 0 2rem 0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3c02b8, #00ffcc);
+            width: 0%;
+            transition: width 0.4s ease;
+            border-radius: 9999px;
+            box-shadow: 0 0 10px #00ffcc;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #3c02b8;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Quiz styling - super simple for 6 year olds */
+        .quiz-question {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #001024;
+            text-align: center;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option {
+            padding: 1.2rem 1.5rem;
+            background: #f8f9ff;
+            border: 3px solid #ddd;
+            border-radius: 16px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover {
+            border-color: #3c02b8;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #3c02b8;
+            background: #f0f4ff;
+        }
+
+        .option.correct {
+            border-color: #00cc88;
+            background: #e6fff0;
+        }
+
+        .option.wrong {
+            border-color: #ff5555;
+            background: #ffe6e6;
+        }
+
+        #quiz-feedback {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            display: none;
+            text-align: center;
+        }
+
+        #quiz-feedback.show {
+            display: block;
+        }
+
+        .feedback-correct {
+            background: #e6fff0;
+            color: #00cc88;
+            border: 2px solid #00cc88;
+        }
+
+        .feedback-wrong {
+            background: #ffe6e6;
+            color: #ff5555;
+            border: 2px solid #ff5555;
+        }
+
+        .submit-quiz-btn {
+            background: #00cc88;
+            color: white;
+            padding: 14px 32px;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 0 auto;
+            display: block;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Life Processes</h1>
+    </header>
+
+    <div class="content">
+        <!-- Progress Bar -->
+        <div class="progress-text" id="progress-text">Slide 1 of 15</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div id="app"></div>
+        <button id="next">Next →</button>
+    </div>
+
+<script>
+    const app = document.getElementById("app");
+    const nextBtn = document.getElementById("next");
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+
+    let currentContentIndex = 0;
+    let currentQuizAnswered = false;
+
+    const contents = [
+        // 1 Keywords (no image - just words)
+        {
+            type: "text",
+            content: `<h3>Keywords</h3>
+                <p id="notes">Please do well to copy these words</p>
+                <p id="words">
+                    Process, activity, organism, Reproduce, nutrition, Photosynthesis, chlorophyll, respire, excrete, Urea, locomotion, irritability, sensitivity, phototropism
+                </p>`
+        },
+        // 2 Life Processes + big diagram (your original image)
+        {
+            type: "text",
+            content: `<h1>Life Processes</h1>
+                <p>
+                    Look around! The world is full of living things.<br><br>
+                    Living things can <strong>move</strong>, <strong>grow</strong>, <strong>eat</strong> and <strong>breathe</strong>.<br><br>
+                    These fun things are called <strong>life processes</strong>.<br><br>
+                    You, your friends, dogs, trees and flowers are all living things!
+                </p>
+                <img src="lessons/images/The 7 Life Processes_ MRS GREN {MUST-HAVE} {BUNDLE!} - Ms Marwa Tarek - Google Chrome 10_30_2025 8_53_02 PM.png" alt="The 7 Life Processes">`
+        },
+        // 3 Nutrition + cute image
+        {
+            type: "text",
+            content: `<h1>Nutrition</h1>
+                <p>
+                    All living things need food to grow big and strong.<br><br>
+                    Food gives them energy to play and run.<br><br>
+                    <strong>You and animals</strong> eat rice, meat, fruits and veggies.<br><br>
+                    <strong>Plants</strong> make their own food with sunshine, green stuff inside them, water, and air. This is called <em>photosynthesis</em>.
+                </p>
+                <img src="lessons/images/nutrition.jpg" alt="Happy kids eating and plants making food in the sun">`
+        },
+        // 4 Quiz 1 (after Nutrition)
+        {
+            type: "quiz",
+            question: "How do plants make their own food?",
+            options: [
+                "A) They eat pizza",
+                "B) With sunshine, water and air",
+                "C) They buy food from the shop",
+                "D) They sleep all day"
+            ],
+            correct: 1,
+            explanation: "🌞 Plants use sunshine, water and air to make food. That’s photosynthesis!"
+        },
+        // 5 Respiration + image
+        {
+            type: "text",
+            content: `<h1>Respiration</h1>
+                <p>
+                    Living things breathe in air.<br><br>
+                    They use the air to get energy from their food.<br><br>
+                    This is called <strong>respiration</strong>.<br><br>
+                    You breathe in… and breathe out!
+                </p>
+                <img src="lessons/images/respiration.jpg" alt="Kids and animals breathing happily">`
+        },
+        // 6 Quiz 2 (after Respiration)
+        {
+            type: "quiz",
+            question: "What does breathing help us do?",
+            options: [
+                "A) Make food",
+                "B) Get energy from our food",
+                "C) Grow hair",
+                "D) Fly like a bird"
+            ],
+            correct: 1,
+            explanation: "Breathing gives us energy from the food we eat."
+        },
+        // 7 Excretion + image
+        {
+            type: "text",
+            content: `<h1>Excretion</h1>
+                <p>
+                    Sometimes our body makes yucky stuff we don’t need.<br><br>
+                    We pee, sweat and breathe out bad air to get rid of it.<br><br>
+                    This is called <strong>excretion</strong>.<br><br>
+                    It keeps us healthy and clean inside!
+                </p>
+                <img src="lessons/images/excretion.jpg" alt="Cute illustration of body getting rid of waste">`
+        },
+        // 8 Quiz 3 (after Excretion)
+        {
+            type: "quiz",
+            question: "What is excretion?",
+            options: [
+                "A) Getting bigger",
+                "B) Getting rid of yucky stuff from our body",
+                "C) Making babies",
+                "D) Running fast"
+            ],
+            correct: 1,
+            explanation: "Excretion is peeing, sweating and breathing out bad air."
+        },
+        // 9 Growth + image
+        {
+            type: "text",
+            content: `<h1>Growth</h1>
+                <p>
+                    Growing means getting bigger and stronger.<br><br>
+                    Babies become big kids.<br>
+                    Little seeds become tall trees.<br><br>
+                    All living things grow!
+                </p>
+                <img src="lessons/images/growth.jpg" alt="Baby growing into child and seed growing into tree">`
+        },
+        // 10 Reproduction + image
+        {
+            type: "text",
+            content: `<h1>Reproduction</h1>
+                <p>
+                    Living things can make baby versions of themselves.<br><br>
+                    This is called <strong>reproduction</strong>.<br><br>
+                    It helps the family of animals and plants keep going forever.
+                </p>
+                <img src="lessons/images/reproduction.jpg" alt="Happy animal family with babies and plant with flowers">`
+        },
+        // 11 Movement + image
+        {
+            type: "text",
+            content: `<h1>Movement</h1>
+                <p>
+                    Living things can move!<br><br>
+                    Animals can walk, run, swim or fly. This big move is called <strong>locomotion</strong>.<br><br>
+                    Plants can’t walk but they can turn their leaves to follow the sun. This is called <strong>phototropism</strong>.
+                </p>
+                <img src="lessons/images/movement.jpg" alt="Animals running and plants turning to the sun">`
+        },
+        // 12 Quiz 4 (after Movement)
+        {
+            type: "quiz",
+            question: "What is locomotion?",
+            options: [
+                "A) Feeling the sun",
+                "B) Moving from one place to another",
+                "C) Eating vegetables",
+                "D) Growing tall"
+            ],
+            correct: 1,
+            explanation: "Locomotion is moving your whole body like walking or swimming."
+        },
+        // 13 Sensitivity + image
+        {
+            type: "text",
+            content: `<h1>Sensitivity</h1>
+                <p>
+                    Living things can feel things around them.<br><br>
+                    You feel hot, cold, loud sounds or bright light and say “ouch!” or “wow!”.<br><br>
+                    Plants feel when the sun is shining and turn towards it.
+                </p>
+                <img src="lessons/images/sensitivity.jpg" alt="Kids feeling hot and cold and plants turning to light">`
+        },
+        // 14 Quiz 5 (after Sensitivity)
+        {
+            type: "quiz",
+            question: "What is phototropism?",
+            options: [
+                "A) Plants turning towards the sun",
+                "B) Breathing out air",
+                "C) Making new babies",
+                "D) Eating lots of food"
+            ],
+            correct: 0,
+            explanation: "Phototropism is when plants turn their leaves to the sunshine."
+        },
+        // 15 Video
+        {
+            type: "video",
+            content: `<h1>Watch the video</h1>
+                <video src="lessons/videos/Life Processes.mp4" height="400" width="700" controls></video>`
+        },
+        // Final screen
+        {
+            type: "end",
+            content: `<h1 style="text-align:center; color:#00cc88; font-size:2.8rem;">🎉 Lesson Complete!</h1>
+                <p style="text-align:center; font-size:1.7rem; margin-top:1rem;">You did it! You are now a Life Processes expert!</p>
+                <p style="text-align:center; font-size:1.4rem;">You know how living things eat, breathe, grow and move.</p>`
+        }
+    ];
+
+    const totalSlides = contents.length - 1;
+    
+    function updateProgress() {
+        const progressPercent = Math.min(((currentContentIndex) / totalSlides) * 100, 100);
+        progressBar.style.width = `${progressPercent}%`;
+        progressText.textContent = `Slide ${Math.min(currentContentIndex + 1, totalSlides)} of ${totalSlides}`;
+    }
+
+    function renderCurrentSlide() {
+        currentQuizAnswered = false;
+        nextBtn.disabled = false;
+
+        const slide = contents[currentContentIndex];
+
+        if (slide.type === "text" || slide.type === "video" || slide.type === "end") {
+            app.innerHTML = slide.content;
+        } 
+        else if (slide.type === "quiz") {
+            nextBtn.disabled = true
+            let optionsHTML = '';
+            slide.options.forEach((opt, i) => {
+                optionsHTML += `
+                    <div class="option" data-index="${i}">
+                        ${opt}
+                    </div>`;
+            });
+
+            app.innerHTML = `
+                <h1 style="text-align:center; color:#3c02b8;">🧪 Quiz Time!</h1>
+                <p class="quiz-question">${slide.question}</p>
+                <div class="quiz-options">${optionsHTML}</div>
+                <button class="submit-quiz-btn" id="submit-quiz">I’m ready! Submit</button>
+                <div id="quiz-feedback"></div>
+            `;
+
+            const optionElements = app.querySelectorAll('.option');
+            optionElements.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    if (currentQuizAnswered) return;
+                    optionElements.forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                });
+            });
+
+            const submitBtn = document.getElementById('submit-quiz');
+            const feedbackDiv = document.getElementById('quiz-feedback');
+
+            submitBtn.addEventListener('click', () => {
+                const selected = app.querySelector('.option.selected');
+                if (!selected) {
+                    alert("Pick one answer first! 🌟");
+                    return;
+                }
+
+                currentQuizAnswered = true;
+                const selectedIndex = parseInt(selected.getAttribute('data-index'));
+                const isCorrect = selectedIndex === slide.correct;
+
+                optionElements.forEach((opt, i) => {
+                    opt.style.pointerEvents = 'none';
+                    if (i === slide.correct){ 
+                        opt.classList.add('correct')
+                    }
+                    else if (i === selectedIndex && !isCorrect){ 
+                        opt.classList.add('wrong')
+                    };
+                });
+
+                feedbackDiv.className = isCorrect ? 'feedback-correct show' : 'feedback-wrong show';
+                feedbackDiv.innerHTML = slide.explanation;
+
+                submitBtn.style.display = 'none';
+                nextBtn.disabled = false;
+            });
+        }
+    }
+
+    function nextSlide() {
+        if (currentContentIndex < contents.length - 1) {
+            currentContentIndex++;
+            renderCurrentSlide();
+            updateProgress();
+        } else {
+            nextBtn.addEventListener("click", ()=>{
+                const user = JSON.parse(localStorage.getItem("currentUser"));
+                user.xp = user.xp + 20
+                window.open("science.html")
+            });
+        }
+    }
+
+    function startApp() {
+        renderCurrentSlide();
+        updateProgress();
+        nextBtn.addEventListener("click", nextSlide);
+    }
+
+    startApp();
+</script>
+
+</html>
