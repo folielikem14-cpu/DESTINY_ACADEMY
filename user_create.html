@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destiny Academy - Create/Edit User</title>
+<style>
+  body {
+    background: radial-gradient(circle at center, #001024, #000);
+    font-family: 'Poppins', sans-serif;
+    color: #b3e5ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .app {
+    max-width: 600px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 4px solid #00ffcc;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0, 150, 255, 0.2);
+    text-align: center;
+  }
+
+  input, textarea {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 30px;
+    border: 1px solid #001;
+    margin-bottom: 10px;
+  }
+
+  textarea { border-radius: 15px; }
+
+  button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #032248;
+    color: white;
+  }
+
+  #preview {
+    margin: 10px 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00ffcc;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1 id="formTitle">Create a New User</h1>
+  <input id="name" placeholder="Full Name" maxlength="25"><br>
+  <input type="number" max="9" min="1" maxlength="0" id="className" placeholder="Class"><br>
+  <input id="school" placeholder="School"><br>
+  <input id="email" placeholder="Email"><br>
+  <textarea id="bio" placeholder="Bio" rows="3"></textarea><br>
+  <label for="profilePic"><b>Enter Your Profile Picture</b></label>
+  <input type="file" id="profilePic" name="profilePic" accept="image/*"><br>
+  <img id="preview" alt="Profile Preview"><br>
+  <button onclick="saveUser()">Save User</button>
+</div>
+
+<script>
+
+let users = JSON.parse(localStorage.getItem("users")) || [];
+const params = new URLSearchParams(window.location.search);
+const editMode = params.get('edit') === 'true';
+let editIndex = localStorage.getItem('editUserIndex');
+const profileInput = document.getElementById("profilePic");
+const preview = document.getElementById("preview");
+
+// If editing, load existing user data
+if (editMode && editIndex !== null) {
+  editIndex = parseInt(editIndex);
+  const user = users[editIndex];
+  document.getElementById('name').value = user.name;
+  document.getElementById('className').value = user.className;
+  document.getElementById('school').value = user.school;
+  document.getElementById('email').value = user.email;
+  document.getElementById('bio').value = user.bio;
+  if(user.profilePic){
+    preview.src = user.profilePic;
+    preview.style.display = 'block';
+  }
+  document.getElementById('formTitle').innerText = 'Edit User';
+}
+
+// Preview selected image
+profileInput.addEventListener("change", function() {
+  const file = profileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      preview.src = reader.result;
+      preview.style.display = "block";
+    }
+    reader.readAsDataURL(file);
+  } else {
+    preview.style.display = "none";
+  }
+});
+
+function saveUser() {
+  const name = document.getElementById("name").value.trim();
+  const className = document.getElementById("className").value.trim();
+  const school = document.getElementById("school").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const bio = document.getElementById("bio").value.trim();
+  let xp = 30
+
+  if(!name || !className || !email){
+    alert("Please fill out all required fields");
+    return;
+  }
+
+  // Function to finalize saving
+  function finalizeSave(profilePic) {
+    const userObj = {name, className, school, email, bio, profilePic, xp};
+
+    if(editMode && editIndex !== null){
+      users[editIndex] = userObj;
+      localStorage.removeItem('editUserIndex');
+    } else {
+      users.push(userObj);
+    }
+
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("User saved!");
+    window.location.href = "profile.html";
+  }
+
+  // Handle profile pic upload
+  if(profileInput.files.length > 0){
+    const reader = new FileReader();
+    reader.onload = function() {
+      finalizeSave(reader.result);
+    }
+    reader.readAsDataURL(profileInput.files[0]);
+  } else {
+    // Keep old profile pic if editing, else null
+    let existingPic = (editMode && users[editIndex] && users[editIndex].profilePic) ? users[editIndex].profilePic : null;
+    finalizeSave(existingPic);
+  }
+}
+</script>
+</body>
+</html>

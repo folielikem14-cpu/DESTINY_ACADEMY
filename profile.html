@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destiny Academy - Select</title>
+<style>
+  body {
+    background: radial-gradient(circle at center, #001024, #000);
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: #b3e5ff;
+  }
+
+  h1 {
+    font-size: 5vmin;
+    text-shadow: 0 0 10px #64b5f6;
+    text-align: center;
+  }
+
+  .app {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 4px solid #00ffcc;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0, 150, 255, 0.2);
+  }
+
+  .user {
+    background-color: #f7f3f3;
+    border: 1px solid #001;
+    height: auto;
+    width: 70%;
+    margin-bottom: 15px;
+    text-align: left;
+    font-size: 18px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 15px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  .user:hover {
+    cursor: pointer;
+    background-color: #fbe9e9a9;
+  }
+
+  .user img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .actions {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+  }
+
+  .actions button {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .edit-btn { background-color: #0277bd; color: white; }
+  .delete-btn { background-color: #d32f2f; color: white; }
+
+  a {
+    text-decoration: none;
+    background-color: #032248;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    display: inline-block;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Select a User</h1>
+  <div class="users" id="usersContainer"></div>
+
+  <a href="user_create.html">Create new user &rightarrow;</a>
+</div>
+
+<script>
+let users = JSON.parse(localStorage.getItem("users")) || [];
+const container = document.getElementById("usersContainer");
+
+function displayUsers() {
+  container.innerHTML = '';
+  if (users.length === 0) {
+    container.innerHTML = "<p>No users yet. Create one.</p>";
+    return;
+  }
+
+  users.forEach((user, index) => {
+    const div = document.createElement('div');
+    div.className = 'user';
+
+    div.innerHTML = `
+      <img src="${user.profilePic || 'Images/ProfilePhoto.jpg'}">
+      <div class="user-details">
+        <strong>${user.name}</strong>
+        <span>Class: ${user.className}</span>
+        <span>School: ${user.school}</span>
+      </div>
+      <div class="actions">
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    `;
+
+    // Wrap the listener in a function to capture correct user
+    (function(u, i) {
+      // Select user when clicking anywhere except buttons
+      div.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('edit-btn') && !e.target.classList.contains('delete-btn')) {
+          selectUser(u);
+        }
+      });
+
+      // Edit button
+      div.querySelector('.edit-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        editUser(i);
+      });
+
+      // Delete button
+      div.querySelector('.delete-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteUser(i);
+      });
+    })(user, index); // Immediately invoke function with user & index
+
+    container.appendChild(div);
+  });
+}
+
+// Global functions
+function selectUser(user) {
+  localStorage.setItem("currentUser", JSON.stringify(user));
+  window.location.href = "select.html";
+}
+
+function editUser(index) {
+  localStorage.setItem("editUserIndex", index);
+  window.location.href = "user_create.html?edit=true";
+}
+
+function deleteUser(index) {
+  if (confirm("Are you sure you want to delete this user?")) {
+    users.splice(index, 1);
+    localStorage.setItem("users", JSON.stringify(users));
+    displayUsers();
+  }
+}
+
+// Initial display
+displayUsers();
+</script>
+</body>
+</html>
