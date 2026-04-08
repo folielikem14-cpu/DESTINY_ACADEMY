@@ -179,14 +179,14 @@
     <span id="User_name"></span>
     <span id="User_XP"></span>
   </div>
-  <div id="profile_pic">
+  <div id="profile_pic" onclick="window.location.href=`dashboard.html`">
     <img src="Images/ProfilePhoto.jpg" id="profile_pic">
   </div>
-  <img src="Images/settings.png" id="settings">
+  <img src="Images/settings.png" id="settings" onclick="window.location.href=`settings.html`">
 
   <h1>Select an Option</h1>
   <div class="options">
-    <div class="option-btn" onclick="window.location.href='library.html'">
+    <div class="option-btn" onclick="window.location.href=`library_${library_attachment}.html`">
       <img src="Images/library.png" alt="Library Icon">
       Library
     </div>
@@ -220,6 +220,12 @@
       <p>Email: ${user.email}</p>
       <p>Bio: ${user.bio}</p>
     `;*/
+    if(user.className <= 3){
+      library_attachment = "lo"
+    }
+    else{
+      library_attachment = "up"
+    }
   }
 </script>
 
