@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Challenge - Levels | Destiny Academy</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #00111f, #003366);
+      color: #61abef;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 { text-align: center; font-size: 2.8rem; color: #a3e0ff; margin-bottom: 0.5rem; }
+    .subtitle { text-align: center; color: #c6ebff; font-size: 1.3rem; margin-bottom: 3rem; }
+
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+
+    .level-card {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(0,150,255,0.3);
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .level-card:hover {
+      transform: scale(1.08);
+      border-color: #00ffcc;
+      box-shadow: 0 0 20px rgba(0,255,204,0.4);
+    }
+
+    .level-card.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .level-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #00ffcc;
+    }
+
+    .level-card h3 {
+      margin: 8px 0;
+      color: #a3e0ff;
+    }
+
+    .xp { font-size: 0.9rem; color: #1ad04d; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 Quiz Challenge</h1>
+    <p class="subtitle">Choose your level • Earn XP as you progress</p>
+
+    <div class="levels-grid" id="levelsGrid"></div>
+  </div>
+
+<script>
+// Generate 100 levels
+const levelsGrid = document.getElementById("levelsGrid");
+const unlockedLevels = parseInt(localStorage.getItem("quizUnlockedLevels")) || 5; // Start with 5 levels unlocked
+
+for (let i = 1; i <= 100; i++) {
+  const card = document.createElement('div');
+  card.className = `level-card ${i > unlockedLevels ? 'locked' : ''}`;
+  
+  card.innerHTML = `
+    <div class="level-number">${i.toString().padStart(2, '0')}</div>
+    <h3>Level ${i}</h3>
+    <div class="xp">+${Math.min(10 + Math.floor(i/5), 30)} XP</div>
+  `;
+
+  if (i <= unlockedLevels) {
+    card.onclick = () => startLevel(i);
+  }
+
+  levelsGrid.appendChild(card);
+}
+
+function startLevel(level) {
+  localStorage.setItem("currentQuizLevel", level);
+  window.location.href = "quiz-game.html";
+}
+</script>
+</body>
+</html>

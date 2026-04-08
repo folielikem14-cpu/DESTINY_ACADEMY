@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Search - Levels | Destiny Academy</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #00111f, #003366);
+      color: #61abef;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      color: #a3e0ff;
+      text-shadow: 0 0 15px rgba(163, 224, 255, 0.7);
+    }
+
+    .subtitle {
+      font-size: 1.4rem;
+      color: #c6ebff;
+      margin-top: 10px;
+    }
+
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .level-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(0, 150, 255, 0.3);
+      border-radius: 18px;
+      padding: 1.8rem 1rem;
+      text-align: center;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .level-card:hover {
+      transform: translateY(-8px) scale(1.05);
+      border-color: #00ffcc;
+      box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
+    }
+
+    .level-card.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .level-number {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: #00ffcc;
+      text-shadow: 0 0 12px #00ffcc;
+      margin-bottom: 8px;
+    }
+
+    .level-title {
+      font-size: 1.4rem;
+      color: #a3e0ff;
+      margin-bottom: 12px;
+    }
+
+    .xp-reward {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: linear-gradient(#1ad04d, #00cc88);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 4rem auto 0;
+      text-align: center;
+      color: #61abef;
+      text-decoration: none;
+      font-size: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔤 Word Search</h1>
+      <p class="subtitle">Find the hidden words • Train your brain!</p>
+    </header>
+
+    <div class="levels-grid" id="levelsGrid"></div>
+
+    <a href="../index.html" class="back-btn">← Back to Games Hub</a>
+  </div>
+
+<script>
+// 100 Levels Configuration
+const totalLevels = 100;
+const levelsGrid = document.getElementById("levelsGrid");
+
+// Get how many levels are unlocked (default: first 5)
+let unlockedLevels = parseInt(localStorage.getItem("wordSearchUnlockedLevels")) || 5;
+
+for (let i = 1; i <= totalLevels; i++) {
+  const card = document.createElement('div');
+  card.className = `level-card ${i > unlockedLevels ? 'locked' : ''}`;
+
+  const xp = Math.min(10 + Math.floor((i - 1) / 3) * 2, 40); // XP increases slowly
+
+  card.innerHTML = `
+    <div class="xp-reward">+${xp} XP</div>
+    <div class="level-number">${i.toString().padStart(2, '0')}</div>
+    <div class="level-title">Level ${i}</div>
+  `;
+
+  if (i <= unlockedLevels) {
+    card.onclick = () => startLevel(i);
+  }
+
+  levelsGrid.appendChild(card);
+}
+
+function startLevel(level) {
+  localStorage.setItem("currentWordSearchLevel", level);
+  window.location.href = "word-search-game.html";
+}
+</script>
+</body>
+</html>
