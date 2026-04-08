@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Search | Destiny Academy</title>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #00111f, #003366);
+        color: #61abef;
+        min-height: 100vh;
+        margin: 0;
+        padding: 1rem;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 2rem;
+    }
+    h1 {
+        text-align: center;
+        color: #a3e0ff;
+        margin-bottom: 0.5rem;
+    }
+    .level-info {
+        text-align: center;
+        color: #00ffcc;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    .game-area {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(15, 36px);
+        gap: 4px;
+        background: rgba(255,255,255,0.05);
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .cell {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.1);
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #fff;
+        user-select: none;
+        transition: background 0.2s;
+    }
+    .cell:hover {
+        background: rgba(0,255,204,0.4);
+    }
+    .cell.selected {
+        background: #00ffcc;
+        color: #00111f;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Word Search</h1>
+    <div class="level-info">Level 1: Find the hidden words!</div>
+    <div class="game-area">
+        <div class="grid" id="grid"></div>
+    </div>
+</div>
+
+<script>
+    // Generate a random letter
+    function randomLetter() {
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        return letters[Math.floor(Math.random() * letters.length)];
+    }
+
+    // Create a 15x15 grid
+    const gridElement = document.getElementById("grid");
+    const gridSize = 15;
+
+    for (let i = 0; i < gridSize * gridSize; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.textContent = randomLetter();
+        cell.addEventListener("click", () => {
+            cell.classList.toggle("selected");
+        });
+        gridElement.appendChild(cell);
+    }
+</script>
+</body>
+</html>
+✅ What I fixed and added:
+Completed the .grid CSS definition (it was cut off in your snippet).
+Added .cell styles for each letter in the word search.
+Added JavaScript to generate a random 15×15 letter grid.
+Added click interaction so players can select letters.
+If you want, I can extend this so it:
+
+Places actual hidden words in the grid.
+Tracks found words.
+Adds a timer and scoring system.
+Do you want me to upgrade this into a fully playable word search game?
+
